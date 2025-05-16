@@ -1,0 +1,5 @@
+
+# [[manager.prepend_keymap]]
+# on = [ ":" ]
+# run = 'plugin custom-shell -- nu --interactive'
+# desc = "custom-shell as default"

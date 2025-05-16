@@ -1,0 +1,7 @@
+[[plugin.deps]]
+use = "AnirudhG07/custom-shell"
+rev = "6b4550a"
+hash = "4ef246dc2e1aa982c3cde89d9a599d00"
+
+[flavor]
+deps = []
