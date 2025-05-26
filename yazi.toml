@@ -29,10 +29,6 @@ reveal = [
   { run = 'explorer /select,%1', orphan = true, desc = "Reveal", for = "windows" },
   { run = '''exiftool "$1"; echo "Press enter to exit"; read''', block = true, desc = "Show EXIF", for = "unix" },
 ]
-extract = [
-  { run = 'unar "$1"', desc = "Extract here", for = "unix" },
-  { run = 'unar "%1"', desc = "Extract here", for = "windows" },
-]
 play = [
   { run = 'mpv "$@"', orphan = true, for = "unix" },
   { run = 'start "%1"', orphan = true, for = "windows" },
@@ -417,12 +413,7 @@ overwrite_offset = [0, 2, 50, 3]
 quit_title = "{n} task{s} running, sure to quit? (y/N)"
 quit_origin = "top-center"
 quit_offset = [0, 2, 50, 3]
-#
-# [[input.prepend_keymap]]
-# 	on   = "e"
-#   run = "shell --block --confirm 'hx .'"
-# 	desc = "open dir"
-#
+
 #
 
 [select]
@@ -432,3 +423,13 @@ open_offset = [0, 1, 50, 7]
 
 [log]
 enabled = true
+
+[[plugin.prepend_fetchers]]
+id   = "git"
+name = "*"
+run  = "git"
+
+[[plugin.prepend_fetchers]]
+id   = "git"
+name = "*/"
+run  = "git"

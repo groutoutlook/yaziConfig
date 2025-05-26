@@ -1,0 +1,17 @@
+[[plugin.deps]]
+use = "AnirudhG07/custom-shell"
+rev = "6b4550a"
+hash = "4ef246dc2e1aa982c3cde89d9a599d00"
+
+[[plugin.deps]]
+use = "yazi-rs/plugins:git"
+rev = "55bf699"
+hash = "66af7550d7b30800ee53358307d9c65"
+
+[[plugin.deps]]
+use = "yazi-rs/plugins:smart-enter"
+rev = "55bf699"
+hash = "62494647f792c984d35a503b917fb4a"
+
+[flavor]
+deps = []
