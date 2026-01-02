@@ -9,14 +9,16 @@ set fallback
 # set dotenv-required := true
 export JUST_ENV := "just_env" # WARN: this is also a method to export env var. 
 _default:
-    @just --list
-
+    @just --list --unsorted
+    
 alias b := build
+[group('dev')]
 build:
     # build task here
 
 alias r := run
 default_args := 'args here'
+[group('debug')]
 run args=default_args:
     @Write-Host {{default_args}} -ForegroundColor Red
 
@@ -25,6 +27,7 @@ format:
     # format plesase. could also run rfmt
 
 alias t := test
+[group('dev')]
 test:
     # test.
 

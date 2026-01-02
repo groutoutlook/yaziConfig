@@ -457,11 +457,11 @@ open_offset = [0, 1, 50, 7]
 enabled = true
 
 [[plugin.prepend_fetchers]]
-id   = "git"
-name = "*"
-run  = "git"
+id  = "git"
+url = "*"
+run = "git"
 
 [[plugin.prepend_fetchers]]
-id   = "git"
-name = "*/"
-run  = "git"
+id  = "git"
+url = "*/"
+run = "git"
