@@ -155,8 +155,6 @@ keymap = [
 	{ on = "~",    run = "help", desc = "Open help" },
 	{ on = "<F1>", run = "help", desc = "Open help" },
 	# INFO: customized
-	{ on = "e",   run = "hx",                        desc = "Edit selected files" },
-
 ]
 
 [tasks]

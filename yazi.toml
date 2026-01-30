@@ -36,9 +36,7 @@ sort_translit  = false
 
 [opener]
 edit = [{ run = '$EDITOR "$@"', block = true, for = "unix" },
-{ run = '''
-  "hx %*"
-''', block = true, for = "windows" },
+  { run = 'hx "%*"', block = true, for = "windows" },
 	{ run = 'hx "$1"',             desc = "Open", for = "linux" },
 	{ run = 'hx "$1"',             desc = "Open", for = "android" },  
 ]
