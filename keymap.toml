@@ -3,6 +3,16 @@
 # "$schema" = "https://yazi-rs.github.io/schemas/keymap.json"
 
 [mgr]
+prepend_keymap =[
+{ on = "z", run = "plugin zoxide", desc = "Jump to a directory via zoxide" },	
+{on   = "<Right>",run  = "plugin smart-enter",desc = "Enter the child directory, or open the file"},
+{on = "\\",run = "plugin split-tabs spl_toggle",desc = "Split-tabs: toggle split tabs mode"}, 
+{ on = ["<c-w>","<c-w>"], run = "plugin split-tabs spl_switch_tab", desc = "Split-tabs: switch to the other pane" },
+{ on = "<F5>", run = [ "escape --visual", "plugin split-tabs spl_copy" ], desc = "Split-tabs: copy to the other pane" },
+{ on = "<F6>", run = [ "escape --visual", "plugin split-tabs spl_move" ], desc = "Split-tabs: move to the other pane" },
+{ on = "P", run = "plugin split-tabs spl_preview", desc = "Split-tabs: toggle preview pane" },
+]
+
 keymap = [
 	{ on = "<Esc>", run = "escape",             desc = "Exit visual mode, clear selection, or cancel search" },
 	{ on = "<C-[>", run = "escape",             desc = "Exit visual mode, clear selection, or cancel search" },
@@ -81,8 +91,6 @@ keymap = [
 	{ on = "s",         run = "search --via=fd",             desc = "Search files by name via fd" },
 	{ on = "S",         run = "search --via=rg",             desc = "Search files by content via ripgrep" },
 	{ on = "<C-s>",     run = "escape --search",             desc = "Cancel the ongoing search" },
-	{ on = "z",         run = "plugin zoxide",               desc = "Jump to a directory via zoxide" },
-	{ on = "Z",         run = "plugin fzf",                  desc = "Jump to a file/directory via fzf" },
 
 	# Linemode
 	{ on = [ "m", "s" ], run = "linemode size",        desc = "Linemode: size" },
@@ -373,81 +381,4 @@ keymap = [
 	{ on = "f", run = "filter", desc = "Filter help items" },
 ]
 
-
-[[mgr.prepend_keymap]]
-on   = "<Right>"
-run  = "plugin smart-enter"
-desc = "Enter the child directory, or open the file"
-
-
-[[mgr.prepend_keymap]]
-on = "["
-run = "plugin whoosh jump_by_key"
-desc = "Jump bookmark by key"
-
-# Direct fuzzy search access
-[[mgr.prepend_keymap]]
-on = "}"
-run = "plugin whoosh jump_by_fzf"
-desc = "Direct fuzzy search for bookmarks"
-
-# Basic bookmark operations
-[[mgr.prepend_keymap]]
-on = [ "]", "a" ]
-run = "plugin whoosh save"
-desc = "Add bookmark (hovered file/directory)"
-
-[[mgr.prepend_keymap]]
-on = [ "]", "A" ]
-run = "plugin whoosh save_cwd"
-desc = "Add bookmark (current directory)"
-
-# Temporary bookmarks
-[[mgr.prepend_keymap]]
-on = [ "]", "t" ]
-run = "plugin whoosh save_temp"
-desc = "Add temporary bookmark (hovered file/directory)"
-
-[[mgr.prepend_keymap]]
-on = [ "]", "T" ]
-run = "plugin whoosh save_cwd_temp"
-desc = "Add temporary bookmark (current directory)"
-
-# Jump to bookmarks
-[[mgr.prepend_keymap]]
-on = "<A-k>"
-run = "plugin whoosh jump_key_k"
-desc = "Jump directly to bookmark with key k"
-
-[[mgr.prepend_keymap]]
-on = [ "]", "f" ]
-run = "plugin whoosh jump_by_fzf"
-desc = "Jump bookmark by fzf"
-
-# Delete bookmarks
-[[mgr.prepend_keymap]]
-on = [ "]", "d" ]
-run = "plugin whoosh delete_by_key"
-desc = "Delete bookmark by key"
-
-[[mgr.prepend_keymap]]
-on = [ "]", "D" ]
-run = "plugin whoosh delete_by_fzf"
-desc = "Delete bookmarks by fzf (use TAB to select multiple)"
-
-[[mgr.prepend_keymap]]
-on = [ "]", "C" ]
-run = "plugin whoosh delete_all"
-desc = "Delete all user bookmarks"
-
-# Rename bookmarks
-[[mgr.prepend_keymap]]
-on = [ "]", "r" ]
-run = "plugin whoosh rename_by_key"
-desc = "Rename bookmark by key"
-
-[[mgr.prepend_keymap]]
-on = [ "]", "R" ]
-run = "plugin whoosh rename_by_fzf"
-desc = "Rename bookmark by fzf"
 

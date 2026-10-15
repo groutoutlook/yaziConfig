@@ -36,7 +36,7 @@ sort_translit  = false
 
 [opener]
 edit = [{ run = '$EDITOR "$@"', block = true, for = "unix" },
-  { run = 'hx "%*"', block = true, for = "windows" },
+  { run = 'hx %*', block = true, for = "windows" },
 	{ run = 'hx "$1"',             desc = "Open", for = "linux" },
 	{ run = 'hx "$1"',             desc = "Open", for = "android" },  
 ]
@@ -68,13 +68,6 @@ play = [
 	{ run = '''mediainfo "$1"; echo "Press enter to exit"; read _''', block = true, desc = "Show media info", for = "unix" },
 	{ run = 'mediainfo "%1" & pause', block = true, desc = "Show media info", for = "windows" },
 ]
-
-
-pdf = [
-    { run = 'okular "$1"', desc = "Open PDF", for = "linux" },
-    { run = 'okular "%1"', desc = "Open PDF", for = "windows" },
-]
-
 [confirm]
 # trash
 trash_title 	= "Trash {n} selected file{s}?"
@@ -105,7 +98,7 @@ open_offset = [ 0, 1, 50, 7 ]
 
 [open]
 rules = [
-  { mime = "application/pdf", use = [ "pdf", "reveal" ] },
+  { mime = "application/pdf", use = [ "open", "reveal" ] },
 
 
 	# Archive
