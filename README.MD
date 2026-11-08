@@ -8,7 +8,7 @@ Requires Yazi 26.9.1 or newer (the openers use `%s` file arguments).
 - Select files with `Space` or `v`, then press `r` or `R` to batch rename. Edit one
   filename per line in Helix, save and quit (`:wq`), then confirm the rename in Yazi.
   `R` also opens the rename list for a single hovered file.
-- `;`: run a command in the preferred shell and show its output in a notification.
+- `;`: run a command in the preferred shell and show plain-text output in a notification.
 - `:`: run a command with the terminal available for input and output.
 - `!`: open an interactive shell in the current directory; `exit` returns to Yazi.
 

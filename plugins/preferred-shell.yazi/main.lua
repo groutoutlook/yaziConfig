@@ -21,6 +21,18 @@ local function shell_args(shell, command)
 	return name == "nu" and {} or { "-i" }
 end
 
+-- Notifications contain plain text, so terminal escape sequences must not reach them.
+local function plain_text(text)
+	return (text
+		:gsub("\27%][^\7\27]*\7", "")
+		:gsub("\27%][^\7\27]*\27\\", "")
+		:gsub("\27%[[0-?]*[ -/]*[@-~]", "")
+		:gsub("\27[@-_]", "")
+		:gsub("\r\n", "\n")
+		:gsub("\r", "\n")
+		:gsub("[%z\1-\8\11\12\14-\31\127]", ""))
+end
+
 return {
 	entry = function(_, job)
 		local interactive = job.args.interactive
@@ -43,16 +55,22 @@ return {
 			if block then
 				result, err = process:stdin(Command.INHERIT):stdout(Command.INHERIT):stderr(Command.INHERIT):status()
 			else
-				result, err = process:output()
+				result, err = process
+					:env("NO_COLOR", "1")
+					:env("CLICOLOR", "0")
+					:env("CLICOLOR_FORCE", "0")
+					:env("FORCE_COLOR", "0")
+					:env("TERM", "dumb")
+					:output()
 			end
 			if result then break end
 		end
 		if permit then permit:drop() end
 
 		if not result then
-			ya.notify { title = "Preferred shell", content = tostring(err), level = "error", timeout = 8 }
+			ya.notify { title = "Preferred shell", content = plain_text(tostring(err)), level = "error", timeout = 8 }
 		elseif not block then
-			local output = (result.stdout or "") .. (result.stderr or "")
+			local output = plain_text((result.stdout or "") .. (result.stderr or ""))
 			ya.notify {
 				title = "Preferred shell",
 				content = output ~= "" and output or ("Exit code: " .. tostring(result.status.code)),
