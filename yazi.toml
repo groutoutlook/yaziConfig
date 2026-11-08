@@ -35,38 +35,34 @@ sort_reverse 	 = false
 sort_translit  = false
 
 [opener]
-edit = [{ run = '$EDITOR "$@"', block = true, for = "unix" },
-  { run = 'hx %*', block = true, for = "windows" },
-	{ run = 'hx "$1"',             desc = "Open", for = "linux" },
-	{ run = 'hx "$1"',             desc = "Open", for = "android" },  
+# Keep a blocking editor available for Yazi's batch rename, even when Open is first.
+edit = [
+  { run = '${EDITOR:-hx} %s', block = true, desc = "Edit ($EDITOR)", for = "unix" },
+  { run = 'hx %s', block = true, desc = "Edit (Helix)", for = "windows" },
 ]
-
 open = [
-	{ run = 'xdg-open "$1"',                desc = "Open", for = "linux" },
-	{ run = 'open "$@"',                    desc = "Open", for = "macos" },
-	{ run = 'start "" "%1"', orphan = true, desc = "Open", for = "windows" },
-	{ run = 'termux-open "$1"',             desc = "Open", for = "android" },
+  { run = 'xdg-open %s1', desc = "Open (system default)", for = "linux" },
+  { run = 'open %s', desc = "Open (system default)", for = "macos" },
+  { run = 'start "" %s1', orphan = true, desc = "Open (system default)", for = "windows" },
+  { run = 'termux-open %s1', desc = "Open (system default)", for = "android" },
 ]
-
 reveal = [
-	{ run = 'xdg-open "$(dirname "$1")"',           desc = "Reveal", for = "linux" },
-	{ run = 'open -R "$1"',                         desc = "Reveal", for = "macos" },
-	{ run = 'explorer /select,"%1"', orphan = true, desc = "Reveal", for = "windows" },
-	{ run = 'termux-open "$(dirname "$1")"',        desc = "Reveal", for = "android" },
-	{ run = '''clear; exiftool "$1"; echo "Press enter to exit"; read _''', block = true, desc = "Show EXIF", for = "unix" },
+  { run = 'xdg-open %d1', desc = "Reveal", for = "linux" },
+  { run = 'open -R %s1', desc = "Reveal", for = "macos" },
+  { run = 'explorer /select,%s1', orphan = true, desc = "Reveal", for = "windows" },
+  { run = 'termux-open %d1', desc = "Reveal", for = "android" },
+  { run = "clear; exiftool %s1; echo 'Press enter to exit'; read _", block = true, desc = "Show EXIF", for = "unix" },
 ]
-
 extract = [
-	{ run = 'ya pub extract --list "$@"', desc = "Extract here", for = "unix" },
-	{ run = 'ya pub extract --list %*',   desc = "Extract here", for = "windows" },
+  { run = 'ya pub extract --list %s', desc = "Extract here" },
 ]
 play = [
-	{ run = 'xdg-open "$1"',                desc = "Play", for = "linux" },
-	{ run = 'open "$@"',                    desc = "Play", for = "macos" },
-	{ run = 'start "" "%1"', orphan = true, desc = "Play", for = "windows" },
-	{ run = 'termux-open "$1"',             desc = "Play", for = "android" },
-	{ run = '''mediainfo "$1"; echo "Press enter to exit"; read _''', block = true, desc = "Show media info", for = "unix" },
-	{ run = 'mediainfo "%1" & pause', block = true, desc = "Show media info", for = "windows" },
+  { run = 'xdg-open %s1', desc = "Play", for = "linux" },
+  { run = 'open %s', desc = "Play", for = "macos" },
+  { run = 'start "" %s1', orphan = true, desc = "Play", for = "windows" },
+  { run = 'termux-open %s1', desc = "Play", for = "android" },
+  { run = "mediainfo %s1; echo 'Press enter to exit'; read _", block = true, desc = "Show media info", for = "unix" },
+  { run = 'mediainfo %s1 & pause', block = true, desc = "Show media info", for = "windows" },
 ]
 [confirm]
 # trash
@@ -104,12 +100,13 @@ rules = [
 	# Archive
 	{ mime = "application/{zip,rar,7z*,tar,gzip,xz,zstd,bzip*,lzma,compress,archive,cpio,arj,xar,ms-cab*}", use = [ "extract", "reveal" ] },
 	# JSON
-	{ mime = "application/{json,ndjson}", use = [ "edit", "reveal" ] },
-	{ mime = "*/javascript", use = [ "edit", "reveal" ] },
+	{ mime = "application/{json,ndjson}", use = [ "open", "edit", "reveal" ] },
+	{ mime = "*/javascript", use = [ "open", "edit", "reveal" ] },
 	# Empty file
-	{ mime = "inode/empty", use = [ "edit", "reveal" ] },
-  # { name = "*/", use = [ "edit", "open", "reveal", ] },
+	{ mime = "inode/empty", use = [ "open", "edit", "reveal" ] },
+  # { url = "*/", use = [ "edit", "open", "reveal", ] },
   { mime = "text/*", use = [
+    "open",
     "edit",
     "reveal",
   ] },
@@ -128,244 +125,288 @@ rules = [
 
   # PowerShell Scripts
   { mime = "text/x-powershell", use = [
+    "open",
     "edit",
     "reveal",
   ] },
   { mime = "application/x-powershell", use = [
+    "open",
     "edit",
     "reveal",
   ] },
   #
   # Batch Files
   { mime = "application/bat", use = [
+    "open",
     "edit",
     "reveal",
   ] },
   { mime = "application/x-bat", use = [
+    "open",
     "edit",
     "reveal",
   ] },
-  { mime = "text/plain", name = "*.bat", use = [
+  { mime = "text/plain", url = "*.bat", use = [
+    "open",
     "edit",
     "reveal",
   ] },
 
   # Text Files
   { mime = "text/plain", use = [
+    "open",
     "edit",
     "reveal",
   ] },
 
   # .config Files
-  { mime = "application/xml", name = "*.config", use = [
+  { mime = "application/xml", url = "*.config", use = [
+    "open",
     "edit",
     "reveal",
   ] },
 
   # Makefiles
   { mime = "text/x-makefile", use = [
+    "open",
     "edit",
     "reveal",
   ] },
-  { mime = "text/plain", name = "Makefile", use = [
+  { mime = "text/plain", url = "Makefile", use = [
+    "open",
     "edit",
     "reveal",
   ] },
 
   # Dockerfiles
   { mime = "text/x-dockerfile", use = [
+    "open",
     "edit",
     "reveal",
   ] },
   #
   # INI Files
-  { mime = "text/plain", name = "*.ini", use = [
+  { mime = "text/plain", url = "*.ini", use = [
+    "open",
     "edit",
     "reveal",
   ] },
 
   # .env Files
-  { mime = "text/plain", name = "*.env", use = [
+  { mime = "text/plain", url = "*.env", use = [
+    "open",
     "edit",
     "reveal",
   ] },
 
   # Java Properties Files
   { mime = "text/x-java-properties", use = [
+    "open",
     "edit",
     "reveal",
   ] },
 
   # Apache Configuration Files (.htaccess)
-  { mime = "text/plain", name = ".htaccess", use = [
+  { mime = "text/plain", url = ".htaccess", use = [
+    "open",
     "edit",
     "reveal",
   ] },
 
   # Shell Profiles (like .bashrc, .zshrc)
-  { mime = "application/x-shellscript", name = ".*rc", use = [
+  { mime = "application/x-shellscript", url = ".*rc", use = [
+    "open",
     "edit",
     "reveal",
   ] },
 
   # Git Configuration Files (.gitignore, .gitconfig)
-  { mime = "text/plain", name = ".gitignore", use = [
+  { mime = "text/plain", url = ".gitignore", use = [
+    "open",
     "edit",
     "reveal",
   ] },
-  { mime = "text/plain", name = ".gitconfig", use = [
+  { mime = "text/plain", url = ".gitconfig", use = [
+    "open",
     "edit",
     "reveal",
   ] },
 
   # Vim Configuration Files (.vimrc)
-  { mime = "text/plain", name = ".vimrc", use = [
+  { mime = "text/plain", url = ".vimrc", use = [
+    "open",
     "edit",
     "reveal",
   ] },
 
   # C and C++
   { mime = "text/x-c", use = [
+    "open",
     "edit",
     "reveal",
   ] },
   { mime = "text/x-c++", use = [
+    "open",
     "edit",
     "reveal",
   ] },
   { mime = "text/x-chdr", use = [
+    "open",
     "edit",
     "reveal",
   ] },
   { mime = "text/x-c++hdr", use = [
+    "open",
     "edit",
     "reveal",
   ] },
   { mime = "text/x-csrc", use = [
+    "open",
     "edit",
     "reveal",
   ] },
   { mime = "text/x-c++src", use = [
+    "open",
     "edit",
     "reveal",
   ] },
 
   # C#
   { mime = "text/x-csharp", use = [
+    "open",
     "edit",
     "reveal",
   ] },
 
   # Java
   { mime = "text/x-java", use = [
+    "open",
     "edit",
     "reveal",
   ] },
 
   # Python
   { mime = "text/x-python", use = [
+    "open",
     "edit",
     "reveal",
   ] },
 
   # TypeScript
   { mime = "application/typescript", use = [
+    "open",
     "edit",
     "reveal",
   ] },
 
   # PHP
   { mime = "application/x-httpd-php", use = [
+    "open",
     "edit",
     "reveal",
   ] },
 
   # Ruby
   { mime = "application/x-ruby", use = [
+    "open",
     "edit",
     "reveal",
   ] },
 
   # Go
   { mime = "text/x-go", use = [
+    "open",
     "edit",
     "reveal",
   ] },
 
   # Rust
   { mime = "text/rust", use = [
+    "open",
     "edit",
     "reveal",
   ] },
 
   # Shell Scripts
   { mime = "application/x-shellscript", use = [
+    "open",
     "edit",
     "reveal",
   ] },
 
   # Perl
   { mime = "text/x-perl", use = [
+    "open",
     "edit",
     "reveal",
   ] },
 
   # Lua
   { mime = "text/x-lua", use = [
+    "open",
     "edit",
     "reveal",
   ] },
 
   # YAML
   { mime = "text/yaml", use = [
+    "open",
     "edit",
     "reveal",
   ] },
 
   # TOML
   { mime = "application/toml", use = [
+    "open",
     "edit",
     "reveal",
   ] },
 
   # JSON
   { mime = "application/json", use = [
+    "open",
     "edit",
     "reveal",
   ] },
 
   # XML
   { mime = "application/xml", use = [
+    "open",
     "edit",
     "reveal",
   ] },
 
   # HTML
   { mime = "text/html", use = [
+    "open",
     "edit",
     "reveal",
   ] },
 
   # CSS
   { mime = "text/css", use = [
+    "open",
     "edit",
     "reveal",
   ] },
 
   # Markdown
   { mime = "text/markdown", use = [
+    "open",
     "edit",
     "reveal",
   ] },
 
   # SQL
   { mime = "application/sql", use = [
+    "open",
     "edit",
     "reveal",
   ] },
 
   # Bash/Zsh
   { mime = "application/x-shellscript", use = [
+    "open",
     "edit",
     "reveal",
   ] },
